@@ -9,6 +9,11 @@ const checkApiKey = require('./middleware/checkApiKey');
 const connectionRoutes = require('./routes/connectionRoutes');
 
 const app = express();
+
+// JWT Auth
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+
 app.use(cors());
 app.use(express.json());
 
