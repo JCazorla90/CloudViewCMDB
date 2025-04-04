@@ -23,7 +23,7 @@ export default function ConnectionsAdmin({ onUpdated }) {
     e.preventDefault();
     const method = editingId ? 'PUT' : 'POST';
     const url = editingId
-      ? `http://localhost:3000/api/connections/${editingId}`
+      ? \`http://localhost:3000/api/connections/\${editingId}\`
       : 'http://localhost:3000/api/connections';
 
     await fetch(url, {
@@ -55,7 +55,7 @@ export default function ConnectionsAdmin({ onUpdated }) {
 
   const handleDelete = async (id) => {
     if (!window.confirm('¿Eliminar conexión?')) return;
-    await fetch(`http://localhost:3000/api/connections/${id}`, {
+    await fetch(\`http://localhost:3000/api/connections/\${id}\`, {
       method: 'DELETE',
       headers: { 'x-api-key': 'mi_clave_secreta_super_segura' }
     });
