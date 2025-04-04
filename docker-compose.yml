@@ -1,3 +1,4 @@
+
 version: '3.8'
 
 services:
@@ -20,6 +21,8 @@ services:
       - "3000:3000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/cmdb
+      - API_KEY=mi_clave_secreta_super_segura
+      - JWT_SECRET=clave_jwt_ultrasecreta
     depends_on:
       - mongo
     networks:
