@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:5
+    container_name: cmdb-mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - cmdb-net
+
+  backend:
+    container_name: cmdb-backend
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/cmdb
+    depends_on:
+      - mongo
+    networks:
+      - cmdb-net
+
+  frontend:
+    container_name: cmdb-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_BACKEND_URL=http://localhost:3000
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    command: npm run dev
+    depends_on:
+      - backend
+    networks:
+      - cmdb-net
+
+volumes:
+  mongo_data:
+
+networks:
+  cmdb-net:
+    driver: bridge
