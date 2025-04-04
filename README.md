@@ -1,5 +1,5 @@
 
-# CMDB Visual Multicloud
+# CloudView CMDB" – Inventario visual multicloud con control tota
 
 Proyecto para inventario visual de recursos cloud (AWS, Azure, IBM Cloud) con backend en Node.js + MongoDB y frontend en React + React Flow.
 
