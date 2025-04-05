@@ -1,32 +1,38 @@
-
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
-
+const fs = require('fs');
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/cmdb_monitor');
+const rules = JSON.parse(fs.readFileSync('./complianceRules.json'));
 
-const Metric = mongoose.model('Metric', new mongoose.Schema({
-  from: String,
-  to: String,
-  latency: Number,
-  status: String,
-  timestamp: { type: Date, default: Date.now }
-}));
+function getField(obj, path) {
+  return path.split('.').reduce((o, k) => (o || {})[k], obj);
+}
 
-app.post('/api/metrics', async (req, res) => {
-  const metric = new Metric(req.body);
-  await metric.save();
-  res.send({ success: true });
+app.post('/api/compliance/check', (req, res) => {
+  const results = req.body.map(resource => {
+    const failures = [];
+    for (const rule of rules) {
+      if (rule.type && rule.type !== resource.type) continue;
+      if (rule.provider && rule.provider !== resource.provider) continue;
+      const val = getField(resource, rule.field);
+      if (rule.shouldBe !== undefined && val !== rule.shouldBe) {
+        failures.push(rule.label);
+      }
+      if (rule.notEqual !== undefined && val === rule.notEqual) {
+        failures.push(rule.label);
+      }
+    }
+    return {
+      id: resource._id || resource.id,
+      compliance: failures.length === 0,
+      issues: failures
+    };
+  });
+  res.json(results);
 });
 
-app.get('/api/metrics', async (req, res) => {
-  const since = new Date(Date.now() - 60000); // últimos 60 segundos
-  const data = await Metric.find({ timestamp: { $gte: since } });
-  res.json(data);
-});
-
-app.listen(3001, () => console.log('Monitor API running on http://localhost:3001'));
+app.listen(3003, () => console.log('Compliance checker running on http://localhost:3003'));

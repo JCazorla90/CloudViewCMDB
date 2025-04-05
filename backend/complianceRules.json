@@ -1,0 +1,22 @@
+[
+  {
+    "type": "s3",
+    "provider": "aws",
+    "field": "metadata.publicAccess",
+    "shouldBe": false,
+    "label": "S3 no debe ser público"
+  },
+  {
+    "type": "ec2",
+    "field": "metadata.tags.env",
+    "notEqual": "dev",
+    "label": "EC2 no puede estar en entorno 'dev'"
+  },
+  {
+    "type": "sql_database",
+    "provider": "azure",
+    "field": "metadata.tlsEnabled",
+    "shouldBe": true,
+    "label": "TLS debe estar habilitado"
+  }
+]
