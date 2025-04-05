@@ -1,0 +1,63 @@
+name: Build and Package CMDB
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    services:
+      mongo:
+        image: mongo:6
+        ports: ['27017:27017']
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Build backend
+        working-directory: ./backend
+        run: |
+          npm install
+          npm run build || true
+
+      - name: Build frontend
+        working-directory: ./frontend
+        run: |
+          npm install
+          npm run build
+
+      - name: Copy Dockerfiles (si es necesario)
+        run: |
+          echo "FROM node:18-alpine\\nWORKDIR /app\\nCOPY . .\\nRUN npm install && npm run build\\nCMD [\\"node\\", \\"server.js\\"]" > ./backend/Dockerfile
+          echo "FROM node:18-alpine\\nWORKDIR /app\\nCOPY . .\\nRUN npm install && npm run build\\nRUN npm install -g serve\\nCMD [\\"serve\\", \\"-s\\", \\"dist\\"]" > ./frontend/Dockerfile
+
+      - name: Build Docker images
+        run: |
+          docker build -t cmdb-backend ./backend
+          docker build -t cmdb-frontend ./frontend
+
+      - name: Save Docker images to artifact
+        run: |
+          docker save cmdb-backend > backend.tar
+          docker save cmdb-frontend > frontend.tar
+        continue-on-error: true
+
+      - name: Upload backend image
+        uses: actions/upload-artifact@v3
+        with:
+          name: cmdb-backend-image
+          path: backend.tar
+
+      - name: Upload frontend image
+        uses: actions/upload-artifact@v3
+        with:
+          name: cmdb-frontend-image
+          path: frontend.tar
