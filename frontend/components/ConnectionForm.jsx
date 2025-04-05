@@ -71,9 +71,30 @@ En CloudView:
   }
 };
 
-export default function ConnectionForm({ onSubmit }) {
+export default function ConnectionForm({ onSuccess }) {
   const [provider, setProvider] = useState('aws');
   const [accessMode, setAccessMode] = useState('token');
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/api/connections', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ provider, accessMode })
+      });
+
+      if (res.ok) {
+        setMessage('✅ Conexión registrada correctamente');
+        if (onSuccess) onSuccess();
+      } else {
+        const err = await res.text();
+        setMessage('❌ Error al registrar: ' + err);
+      }
+    } catch (err) {
+      setMessage('❌ Error de red: ' + err.message);
+    }
+  };
 
   return (
     <div className="p-4 border rounded bg-white max-w-xl mx-auto">
@@ -97,7 +118,9 @@ export default function ConnectionForm({ onSubmit }) {
         {instructions[provider][accessMode]}
       </div>
 
-      <button className="bg-blue-600 text-white px-4 py-1 rounded" onClick={() => onSubmit({ provider, accessMode })}>
+      {message && <div className="text-sm mb-2">{message}</div>}
+
+      <button className="bg-blue-600 text-white px-4 py-1 rounded" onClick={handleSubmit}>
         Registrar conexión
       </button>
     </div>
