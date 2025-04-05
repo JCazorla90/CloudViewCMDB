@@ -33,7 +33,7 @@ export default function MonitorView() {
         .enter()
         .append("circle")
         .attr("r", 20)
-        .attr("fill", "#4f46e5");
+        .attr("fill", "#10b981");
 
       const label = svg.selectAll(".label")
         .data(nodes)
@@ -60,5 +60,10 @@ export default function MonitorView() {
     return () => clearInterval(interval);
   }, []);
 
-  return <svg ref={ref}></svg>;
+  return (
+    <div>
+      <h2 className="text-lg font-semibold mb-2">Monitor de Servicios</h2>
+      <svg ref={ref}></svg>
+    </div>
+  );
 }
