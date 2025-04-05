@@ -107,6 +107,26 @@ VITE_BACKEND_URL=http://localhost:3000
 - 🛠 API REST documentada con Swagger y pruebas Postman
 - ⚙️ Scripts y despliegue rápido con Docker + Makefile
 
+## 🤖 Asistente CMDB (IA integrada)
+
+Consulta tu infraestructura en lenguaje natural gracias al asistente integrado. Soporte para:
+
+- **OpenAI (GPT-4)**: Requiere `OPENAI_API_KEY`
+- **AWS Bedrock (Claude v2)**: Requiere `AWS_REGION` y permisos sobre `bedrock:InvokeModel`
+
+### 🧠 Ejemplos de preguntas que puedes hacer:
+
+- ¿Qué instancias EC2 tengo sin tags?
+- ¿Qué recursos cambiaron la última semana?
+- ¿Qué servicios no cumplen las políticas de seguridad?
+- ¿Quién tiene acceso a la base de datos de producción?
+
+Configuración en `.env`:
+```
+OPENAI_API_KEY=sk-xxx
+AWS_REGION=us-east-1
+```
+
 
 ---
 
