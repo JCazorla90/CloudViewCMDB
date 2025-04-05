@@ -168,7 +168,7 @@ cmdb-fullstack/
 
 ---
 
-## 🔒 Seguridad (siguiente paso recomendado)
+## 🔒 Seguridad 
 
 - Middleware de autenticación (JWT o API Key)
 - Logs de auditoría
