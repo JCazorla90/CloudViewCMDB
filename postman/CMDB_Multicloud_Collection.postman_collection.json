@@ -1,0 +1,152 @@
+{
+  "info": {
+    "name": "CMDB Multicloud Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get Connections",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/connections",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "connections"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Connection",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"provider\": \"aws\",\n  \"accessMode\": \"token\",\n  \"credentials\": {\n    \"accessKeyId\": \"YOUR_ACCESS_KEY\",\n    \"secretAccessKey\": \"YOUR_SECRET_KEY\",\n    \"region\": \"us-east-1\"\n  }\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/connections",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "connections"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Delete Connection",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/connections/:id",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "connections",
+            ":id"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Discover All Resources",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/discover/all",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "discover",
+            "all"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Sync Resources",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[]"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/syncResources",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "syncResources"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Check Compliance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "[]"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/compliance/check",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "compliance",
+            "check"
+          ]
+        }
+      }
+    }
+  ]
+}
