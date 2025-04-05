@@ -4,6 +4,8 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const fetch = require('node-fetch');
+const queryRouter = require('./ai/query');
+app.use(queryRouter);
 
 const app = express();
 app.use(cors());
