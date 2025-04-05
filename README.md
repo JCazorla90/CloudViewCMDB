@@ -100,6 +100,7 @@ VITE_BACKEND_URL=http://localhost:3000
 - Visualización de recursos multicloud con logos
 - Diagramas interactivos con tooltips y relaciones
 - Filtros por tipo y proveedor
+- UI Admin para configuración de conexiones
 - Exportación de diagramas a PNG y JSON
 
 ---
@@ -117,5 +118,34 @@ VITE_BACKEND_URL=http://localhost:3000
 - Soporte para más clouds (GCP, Oracle)
 - BBDD relacional opcional (PostgreSQL)
 - Multitenancy por organización
-- UI Admin para configuración de conexiones
+
+
+## 🚧 Futuros desarrollos y funcionalidades avanzadas
+
+En futuras versiones, CloudView CMDB incluirá:
+
+### 🔐 Autenticación e identidad
+- Soporte para **SSO con Okta, LDAP y Active Directory**
+- Gestión avanzada de usuarios y grupos con control de roles granular
+
+### ☁️ Proveedores y plataformas adicionales
+- **Google Cloud Platform (GCP)** como proveedor soportado
+- Integración con entornos **OpenShift** y **Kubernetes**
+- Descubrimiento automático de pods, servicios y clústeres
+
+### 🛡️ Seguridad y cumplimiento
+- Validación automática de recursos contra estándares como:
+  - **OWASP Top 10**
+  - **ENS** (Esquema Nacional de Seguridad)
+  - **NIS2** (Directiva europea de ciberseguridad)
+- Análisis de versiones de componentes y posibles vulnerabilidades
+
+### 📊 Monitorización y observabilidad
+- Integración con sistemas como **Prometheus**, **Grafana**, **CloudWatch**
+- Visualización de KPIs de salud, coste y rendimiento de los recursos
+
+### 🧠 Automatización y mejoras inteligentes
+- Recomendaciones de hardening o buenas prácticas cloud
+- Alertas configurables por tipo, proveedor o criticidad
+- Detención de configuraciones huérfanas o inconsistentes
 
