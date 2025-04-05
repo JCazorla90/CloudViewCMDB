@@ -2,18 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const fs = require('fs');
-const app = express();
+const path = require('path');
+const fetch = require('node-fetch');
 
+const app = express();
 app.use(cors());
 app.use(express.json());
 
-// --- Conexión MongoDB ---
 mongoose.connect('mongodb://localhost:27017/cmdb', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
 
-// --- Modelos ---
+// --- MODELOS ---
 const connectionSchema = new mongoose.Schema({
   provider: String,
   accessMode: String,
@@ -40,7 +41,7 @@ const changeSchema = new mongoose.Schema({
 });
 const ChangeLog = mongoose.model('ChangeLog', changeSchema);
 
-// --- COMPLIANCE ---
+// --- COMPLIANCE CHECKER ---
 const rules = JSON.parse(fs.readFileSync('./complianceRules.json'));
 function getField(obj, path) {
   return path.split('.').reduce((o, k) => (o || {})[k], obj);
@@ -69,7 +70,7 @@ app.post('/api/compliance/check', async (req, res) => {
   res.json(results);
 });
 
-// --- API Conexiones ---
+// --- API DE CONEXIONES ---
 app.get('/api/connections', async (req, res) => {
   const conns = await Connection.find();
   res.json(conns);
@@ -120,21 +121,40 @@ app.post('/api/syncResources', async (req, res) => {
   res.send({ success: true });
 });
 
-// --- DISCOVER ALL ---
+// --- DISCOVER ALL CON REQUIRE DINÁMICO ---
 app.post('/api/discover/all', async (req, res) => {
   const connections = await Connection.find();
   const grouped = {};
+
   for (const conn of connections) {
     if (!grouped[conn.provider]) grouped[conn.provider] = [];
     grouped[conn.provider].push(conn);
   }
 
+  const allDiscovered = [];
+
   for (const [provider, conns] of Object.entries(grouped)) {
-    console.log(`▶️ Descubriendo recursos para ${provider} (${conns.length} conexiones)...`);
-    // Aquí se llamaría a discoverAWS(), discoverAzure(), etc.
+    console.log(`▶️ Descubriendo recursos para ${provider}...`);
+    try {
+      const modulePath = path.join(__dirname, 'discover', `${provider}.js`);
+      const discoverFn = require(modulePath);
+
+      for (const conn of conns) {
+        const resources = await discoverFn(conn);
+        allDiscovered.push(...resources);
+
+        await fetch('http://localhost:3002/api/syncResources', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(resources)
+        });
+      }
+    } catch (err) {
+      console.error(`❌ Error al descubrir ${provider}:`, err.message);
+    }
   }
 
-  res.send({ success: true, message: 'Autodiscovery iniciado por proveedor' });
+  res.send({ success: true, discovered: allDiscovered.length });
 });
 
-app.listen(3000, () => console.log('🌐 API CMDB escuchando en http://localhost:3000'));
+app.listen(3000, () => console.log('✅ CloudView CMDB backend listo en http://localhost:3000'));
