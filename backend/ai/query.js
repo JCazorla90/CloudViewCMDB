@@ -1,21 +1,26 @@
 const express = require('express');
 const { Configuration, OpenAIApi } = require('openai');
+const { BedrockRuntimeClient, InvokeModelCommand } = require('@aws-sdk/client-bedrock-runtime');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
 const router = express.Router();
-
 const Resource = mongoose.model('Resource');
 const ChangeLog = mongoose.model('ChangeLog');
 
-const configuration = new Configuration({
+// OpenAI Setup
+const openai = new OpenAIApi(new Configuration({
   apiKey: process.env.OPENAI_API_KEY
+}));
+
+// Bedrock Setup
+const bedrock = new BedrockRuntimeClient({
+  region: process.env.AWS_REGION || 'us-east-1'
 });
-const openai = new OpenAIApi(configuration);
 
 router.post('/api/query', async (req, res) => {
   try {
-    const question = req.body.question;
+    const { question, provider } = req.body;
     const resources = await Resource.find().lean();
     const changes = await ChangeLog.find().sort({ timestamp: -1 }).limit(10).lean();
 
@@ -35,16 +40,33 @@ ${context}
 Pregunta del usuario: ${question}
 `;
 
-    const response = await openai.createChatCompletion({
-      model: "gpt-4",
-      messages: [{ role: "user", content: prompt }],
-      temperature: 0.2
-    });
-
-    res.json({ answer: response.data.choices[0].message.content });
+    if (provider === 'bedrock') {
+      const input = {
+        modelId: 'anthropic.claude-v2',
+        contentType: 'application/json',
+        accept: 'application/json',
+        body: JSON.stringify({
+          prompt: `\n\nHuman: ${prompt}\n\nAssistant:`,
+          max_tokens_to_sample: 300,
+          temperature: 0.5
+        })
+      };
+      const command = new InvokeModelCommand(input);
+      const response = await bedrock.send(command);
+      const body = await response.body.transformToString();
+      const parsed = JSON.parse(body);
+      return res.json({ answer: parsed.completion || 'Respuesta no válida' });
+    } else {
+      const response = await openai.createChatCompletion({
+        model: 'gpt-4',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.2
+      });
+      return res.json({ answer: response.data.choices[0].message.content });
+    }
   } catch (err) {
-    console.error("❌ Error al procesar pregunta:", err.message);
-    res.status(500).json({ error: "Error generando respuesta" });
+    console.error('❌ Error en /api/query:', err.message);
+    res.status(500).json({ error: 'Error generando respuesta' });
   }
 });
 
