@@ -7,7 +7,7 @@ Proyecto para inventario visual de recursos cloud (AWS, Azure, IBM Cloud) con ba
 
 
 ```
-                      \\\\\\\
+                     
                             \\\\\\\\\\\\
                           \\\\\\\\\\\\\\\
   -----------,-|           |C>   // )\\\\|
