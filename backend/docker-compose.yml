@@ -15,22 +15,10 @@ services:
       - "3000:3000"
     depends_on:
       - mongo
-    environment:
-      - MONGO_URI=mongodb://mongo:27017/cmdb
     volumes:
       - ./backend:/app
-
-  frontend:
-    build:
-      context: ./frontend
-    ports:
-      - "5173:5173"
-    depends_on:
-      - backend
     environment:
-      - VITE_BACKEND_URL=http://localhost:3000
-    volumes:
-      - ./frontend:/app
+      - MONGO_URI=mongodb://mongo:27017/cmdb
 
 volumes:
   mongo_data:
