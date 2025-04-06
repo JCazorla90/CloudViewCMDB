@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  ganache:
+    build: .
+    container_name: ganache
+    ports:
+      - "8545:8545"
+    networks:
+      - cmdb_net
+
+  # backend:
+  #   build:
+  #     context: ../backend
+  #   container_name: cmdb-backend
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - WEB3_RPC_URL=http://ganache:8545
+  #     - AUDIT_CONTRACT_ADDRESS=0xYourContractDeployedAddress
+  #     - AUDIT_MODE=real
+  #   depends_on:
+  #     - ganache
+  #   networks:
+  #     - cmdb_net
+
+networks:
+  cmdb_net:
+    driver: bridge

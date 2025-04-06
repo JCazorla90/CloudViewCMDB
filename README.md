@@ -1,33 +1,28 @@
-
 # CloudView CMDB – Inventario visual multicloud con control total
 
+CloudView CMDB es una plataforma completa de gestión de recursos en entornos cloud, que permite visualizar, auditar y descubrir recursos de AWS, Azure, GCP e IBM Cloud en tiempo real.
 
-**CloudView CMDB** es una plataforma completa de gestión de recursos en entornos cloud, que permite visualizar y auditar infraestructuras de AWS, Azure, GCP e IBM Cloud.
-
-# 🚧 EN CONSTRUCCION 🚧
-
+> 🚧 EN CONSTRUCCIÓN – Proyecto en desarrollo activo
 
 ```
-                     
-                            \\\\\\\\\\\\
-                          \\\\\\\\\\\\\\\
-  -----------,-|           |C>   // )\\\\|
-           ,','|          /    || ,'/////|
----------,','  |         (,    ||   /////
-         ||    |          \\  ||||//''''|
-         ||    |           |||||||     _|
-         ||    |______      `````\____/ \
-         ||    |     ,|         _/_____/ \
-         ||  ,'    ,' |        /          |
-         ||,'    ,'   |       |         \  |
-_________|/    ,'     |      /           | |
-_____________,'      ,',_____|      |    | |
-             |     ,','      |      |    | |
-             |   ,','    ____|_____/    /  |
-             | ,','  __/ |             /   |
-_____________|','   ///_/-------------/   |
-              |===========,'
+                       \\\\\\\\\\\\
+          ,','|      /    || ,'/////|
+---------,','  |     (,    ||   /////
+        ||    |      \\  ||||//''''|
+        ||    |       |||||||     _|
+        ||    |______  ````\____/ \
+        ||    |     ,|     _/_____/ \
+        ||  ,'    ,' |    /          |
+        ||,'    ,'   |   |         \  |
+_________|/    ,'    |  /           | |
+_____________,'   ,',_|      |     | |
+            |   ,','  |      |     | |
+            | ,','  __|_____/     /  |
+___________|','  ///_/----------/   |
+            |===========,'
 ```
+
+---
 
 ## 🧱 Requisitos
 
@@ -49,7 +44,7 @@ Esto levanta:
 
 ---
 
-## 🧪 Desarrollo local (opcional)
+## 🧪 Desarrollo local
 
 ### Backend
 
@@ -75,14 +70,19 @@ npm run dev
 
 ### 📁 backend.env
 
-```
+```env
 PORT=3000
 MONGO_URI=mongodb://localhost:27017/cmdb
+AUDIT_MODE=mock
+AUDIT_CONTRACT_ADDRESS=0x...
+WEB3_RPC_URL=http://localhost:8545
+OPENAI_API_KEY=sk-xxx
+AWS_REGION=us-east-1
 ```
 
 ### 📁 frontend.env
 
-```
+```env
 VITE_BACKEND_URL=http://localhost:3000
 ```
 
@@ -90,165 +90,99 @@ VITE_BACKEND_URL=http://localhost:3000
 
 ## 📦 Estructura
 
-- `/backend`: Node.js + MongoDB + Connectores AWS/Azure/IBM
-- `/frontend`: React + React Flow + Tailwind + logos de los proveedores
-- `/public/logos`: logos organizados por proveedor
+```
+/backend: API Node.js (Connections, Sync, Compliance, Discovery)
+/frontend: Interfaz React + React Flow + Tailwind
+/public/logos: Logos oficiales organizados por proveedor
+/scripts: Scripts para onboarding y despliegue
+```
 
 ---
-## 🧩 Funcionalidades
+
+## 🧩 Funcionalidades principales
 
 - 🔍 Descubrimiento automático de recursos por proveedor
-- 🗂 Visualización gráfica por tipo de diagrama (infraestructura, red, usuarios…)
-- 🧠 Control de cumplimiento (compliance) por reglas personalizables (OWASP, ENS…)
+- 🗂 Visualización por tipo (infraestructura, red, usuarios…)
 - 🛡 Seguimiento de cambios (create/update/delete con auditoría)
-- 🧑‍💼 Panel de administración para gestionar conexiones
+- 🧠 Validación de cumplimiento (reglas personalizables: ENS, OWASP…)
+- 📥 Panel de administración para gestionar conexiones
 - 📤 Exportación de diagramas e inventario
-- 🔐 Login visual con roles (`admin`, `viewer`) y JWT
-- 🛠 API REST documentada con Swagger y pruebas Postman
-- ⚙️ Scripts y despliegue rápido con Docker + Makefile
+- 🔐 Login visual con JWT y roles (admin, viewer)
+- 🛠 API REST con Swagger + pruebas Postman
+- ⚙️ Scripts + Makefile + despliegue rápido
+- 🤖 Asistente CMDB con IA (OpenAI / AWS Bedrock)
+- 🔗 Blockchain privada para auditoría sin gas (Ganache)
+- 🔐 Panel visual de eventos registrados en blockchain
+- 👁️‍🗨️ Mapa visual IAM de roles/usuarios y permisos
+- 📡 Dashboard de monitorización: latencia, errores, disponibilidad
+
+---
 
 ## 🤖 Asistente CMDB (IA integrada)
 
-Consulta tu infraestructura en lenguaje natural gracias al asistente integrado. Soporte para:
+Consulta tu infraestructura en lenguaje natural. Compatible con:
 
-- **OpenAI (GPT-4)**: Requiere `OPENAI_API_KEY`
-- **AWS Bedrock (Claude v2)**: Requiere `AWS_REGION` y permisos sobre `bedrock:InvokeModel`
+- OpenAI GPT-4
+- AWS Bedrock (Claude v2)
 
-### 🧠 Ejemplos de preguntas que puedes hacer:
-
+Ejemplos:
 - ¿Qué instancias EC2 tengo sin tags?
-- ¿Qué recursos cambiaron la última semana?
-- ¿Qué servicios no cumplen las políticas de seguridad?
 - ¿Quién tiene acceso a la base de datos de producción?
-
-Configuración en `.env`:
-```
-OPENAI_API_KEY=sk-xxx
-AWS_REGION=us-east-1
-```
-
+- ¿Qué recursos incumplen las políticas ENS?
 
 ---
 
----
-
-## 🚀 Despliegue rápido
+## 🚀 Comandos útiles
 
 ```bash
-make dev             # Levanta frontend + backend + Mongo
-make clean           # Elimina contenedores y volúmenes
+make dev             # Frontend + backend + Mongo
+make clean           # Limpia contenedores y volúmenes
 ./scripts/deploy-all.sh  # Despliegue completo
 ```
 
-### 🐳 ¿No tienes permisos?
-```bash
-chmod +x ./scripts/*.sh
-```
-
 ---
 
-## 📦 Estructura del proyecto
+## 🔐 Seguridad
 
-```
-cmdb-fullstack/
-├── backend/            # API Node.js (Connections, Sync, Compliance, Discovery)
-│   ├── server.js
-│   ├── complianceRules.json
-│   └── discover/
-├── frontend/           # Interfaz React + ReactFlow + Tailwind
-│   ├── components/
-│   ├── pages/
-│   └── DiagramView.jsx
-├── scripts/            # Scripts para onboarding y despliegue rápido
-├── docker-compose.yml  # Backend + Frontend + MongoDB
-├── Makefile            # Comandos rápidos
-```
-
----
-
----
-
-## ⚙️ Endpoints clave (API)
-
-- `GET /api/connections`
-- `POST /api/connections`
-- `DELETE /api/connections/:id`
-- `POST /api/syncResources`
-- `POST /api/compliance/check`
-- `POST /api/discover/all`
-
----
-
-## 🌍 Proveedores soportados
-
-- **AWS**: EC2, S3, Lambda, RDS, VPC...
-- **Azure**: VMs, Networks, Resource Groups
-- **GCP**: Compute, Storage
-- **IBM Cloud**: Virtual Servers, Object Storage, Databases
-
----
-
-## 🔒 Seguridad
-
-- Middleware de autenticación (JWT o API Key)
-- Logs de auditoría
-- Roles de acceso por tipo de usuario
+- JWT / API Key para autenticación
+- Roles y permisos por tipo de usuario
+- Blockchain privada para logs inmutables
 
 ---
 
 ## 📈 Roadmap
 
-- Soporte para más clouds (GCP, Oracle)
-- BBDD relacional opcional (PostgreSQL)
+- Soporte completo para GCP, Oracle
+- PostgreSQL como BBDD adicional
 - Multitenancy por organización
-
-
-## 🚧 Futuros desarrollos
-
-En futuras versiones, CloudView CMDB incluirá:
-
-### 🔐 Autenticación e identidad
-- Soporte para **SSO con Okta, LDAP y Active Directory**
-- Gestión avanzada de usuarios y grupos con control de roles granular
-
-### ☁️ Proveedores y plataformas adicionales
-- **Google Cloud Platform (GCP)** como proveedor soportado
-- Integración con entornos **OpenShift** y **Kubernetes**
-- Descubrimiento automático de pods, servicios y clústeres
-
-### 🛡️ Seguridad y cumplimiento
-- Validación automática de recursos contra estándares como:
-  - **OWASP Top 10**
-  - **ENS** (Esquema Nacional de Seguridad)
-  - **NIS2** (Directiva europea de ciberseguridad)
-- Análisis de versiones de componentes y posibles vulnerabilidades
-
-### 📊 Monitorización y observabilidad
-- Integración con sistemas como **Prometheus**, **Grafana**, **CloudWatch**
-- Visualización de KPIs de salud, coste y rendimiento de los recursos
-
-### 🧠 Automatización y mejoras inteligentes
-- Recomendaciones de hardening o buenas prácticas cloud
-- Alertas configurables por tipo, proveedor o criticidad
-- Detención de configuraciones huérfanas o inconsistentes
-
-## ✨ Futuras funcionalidades
-
-- 🌐 Soporte para Okta, Active Directory, LDAP
-- 📘 Documentación Swagger automática
-- 🔭 Integración con Jira, ServiceNow, GitHub
-- 📦 Licenciamiento y recursos físicos
-- ☁️ Validación de versiones y cumplimiento con NIS2, OWASP, ENS
-- 👁️‍🗨️ Mapa visual IAM con roles y permisos
-- 📡 Dashboard de observabilidad integrado (latencia, errores, etc.)
-- 🧠 Auto-descubrimiento continuo y scheduling
+- Integración con Jira, ServiceNow
+- IAM visual + trazabilidad
+- Auto-discovery continuo
 
 ---
 
-## 🧪 Pruebas y documentación
+## 🔭 Futuros desarrollos
 
-- ✔️ Postman Collection incluida
-- ✔️ Manual de usuario (PDF)
+- 🧠 Recomendaciones de hardening y buenas prácticas
+- 🛡️ Validación automática de seguridad (OWASP, ENS, NIS2)
+- 📊 Visualización de métricas desde Prometheus, Grafana
+- 📡 Integración con OpenShift, Kubernetes, pods
+- 🧩 Soporte para LDAP, Okta, Active Directory
+- 🧪 Testing automático + cobertura
+- 📘 Documentación Swagger + Manual de usuario (PDF)
 
 ---
 
+## 📚 Extras incluidos
+
+- ✔️ Postman Collection
+- ✔️ Documentación técnica paso a paso
+- ✔️ Contrato inteligente + ABI + script de despliegue
+- ✔️ Docker + Docker Compose + Makefile
+
+---
+
+
+---
+
+© 2025 CloudView – Todos los derechos reservados.
