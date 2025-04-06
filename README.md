@@ -149,6 +149,24 @@ make clean           # Limpia contenedores y volúmenes
 - Blockchain privada para logs inmutables
 
 ---
+⚙️ Personalización de la Interfaz (UX/UI)
+CloudView CMDB permite a cada usuario adaptar la interfaz a su gusto:
+
+🧭 Posición del menú de navegación:
+
+Arriba (modo clásico, por defecto)
+
+Izquierda (modo panel lateral tipo dashboard)
+
+🌗 Modo visual:
+
+Claro (modo clásico)
+
+Oscuro (ideal para sesiones prolongadas o entornos con poca luz)
+
+La configuración se guarda automáticamente en el navegador y se aplica al recargar la app.
+
+---
 
 ## 📈 Roadmap
 
@@ -181,7 +199,7 @@ make clean           # Limpia contenedores y volúmenes
 - ✔️ Docker + Docker Compose + Makefile
 
 ---
-📘 Documentación de la API REST
+#📘 Documentación de la API REST
 Disponible en tu backend:
 
 ➡️ http://localhost:3000/api/docs
