@@ -181,7 +181,13 @@ make clean           # Limpia contenedores y volúmenes
 - ✔️ Docker + Docker Compose + Makefile
 
 ---
+📘 Documentación de la API REST
+Disponible en tu backend:
 
+➡️ http://localhost:3000/api/docs
+
+Basada en OpenAPI 3.0 + Swagger UI.
+Incluye todos los endpoints principales de CloudView CMDB: conexiones, sincronización, compliance, descubrimiento y asistente IA.
 
 ---
 
