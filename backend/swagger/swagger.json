@@ -1,0 +1,145 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "CloudView CMDB API",
+    "description": "API REST para gesti\u00f3n de infraestructura multicloud con visualizaci\u00f3n, auditor\u00eda y cumplimiento.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "paths": {
+    "/api/connections": {
+      "get": {
+        "summary": "Obtener todas las conexiones",
+        "responses": {
+          "200": {
+            "description": "Listado de conexiones"
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear nueva conexi\u00f3n cloud",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Connection"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Conexi\u00f3n creada"
+          }
+        }
+      }
+    },
+    "/api/connections/{id}": {
+      "delete": {
+        "summary": "Eliminar conexi\u00f3n por ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conexi\u00f3n eliminada"
+          }
+        }
+      }
+    },
+    "/api/syncResources": {
+      "post": {
+        "summary": "Sincronizar recursos",
+        "responses": {
+          "200": {
+            "description": "Recursos sincronizados"
+          }
+        }
+      }
+    },
+    "/api/changes/{resourceId}": {
+      "get": {
+        "summary": "Historial de cambios de un recurso",
+        "parameters": [
+          {
+            "name": "resourceId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Listado de cambios"
+          }
+        }
+      }
+    },
+    "/api/compliance/check": {
+      "post": {
+        "summary": "Validar cumplimiento de recursos",
+        "responses": {
+          "200": {
+            "description": "Resultado del compliance"
+          }
+        }
+      }
+    },
+    "/api/discover/all": {
+      "post": {
+        "summary": "Iniciar autodiscovery por proveedor",
+        "responses": {
+          "200": {
+            "description": "Autodiscovery iniciado"
+          }
+        }
+      }
+    },
+    "/api/query": {
+      "post": {
+        "summary": "Asistente CMDB IA",
+        "description": "Consulta tu infraestructura con lenguaje natural usando OpenAI o AWS Bedrock",
+        "responses": {
+          "200": {
+            "description": "Respuesta del asistente"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Connection": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string",
+            "example": "aws"
+          },
+          "accessMode": {
+            "type": "string",
+            "example": "token"
+          },
+          "credentials": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}
